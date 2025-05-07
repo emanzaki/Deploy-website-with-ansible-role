@@ -1,0 +1,41 @@
+---
+# tasks file for Deploy-website
+    - name: Install httpd service and enable it
+      dnf:
+        name: httpd
+        state: present
+    - name: Start httpd service
+      service:
+        name: httpd
+        state: started
+- name: enable httpd service
+  service:
+    name: httpd
+    enabled: yes
+    - name: Backup the configuration file
+      copy:
+        src: /etc/httpd/conf/httpd.conf
+        dest: /etc/httpd/conf/httpd.conf.bak
+        remote_src: yes
+    - name: Hosting website on port 88
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^Listen '
+        line: 'Listen 88'
+    - name: Allow httpd SELinux
+      command: semanage port -m -t http_port_t -p tcp 88
+      args:
+        warn: false
+      ignore_errors: true
+    - name: Firewall
+      firewalld:
+        port: 88/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+    - name: Restart service
+      service:
+        name: httpd
+        state: restarted
+    - name: Write some data on index file
+      shell: echo "<h1>Hello from $(hostname)</h1>" > /var/www/html/index.html
