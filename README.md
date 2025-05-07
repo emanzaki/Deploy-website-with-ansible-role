@@ -1,38 +1,74 @@
-Role Name
-=========
+# Deploy Website with Ansible Role
 
-A brief description of the role goes here.
+This repository contains an Ansible project to automate the deployment of a static website using a reusable Ansible role.
 
-Requirements
-------------
+## 📦 Project Structure
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+```bash
+.
+├── ansible.cfg
+├── playbook.yml
+├── inventory
+├── roles/
+│   └── website/
+│       ├── tasks/
+│       │   └── main.yml
+└── README.md
+```
 
-Role Variables
---------------
+## 🚀 Features
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* Uses a custom Ansible role (`website`) to handle deployment tasks.
+* Copies a static HTML file (`index.html`) to the target web server.
+* Ensures the Apache web server is installed and running.
+* Clean, modular role structure for reuse in other projects.
 
-Dependencies
-------------
+## 📋 Prerequisites
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+* Ansible installed on the control machine.
+* A target host (remote VM or server) with:
 
-Example Playbook
-----------------
+  * SSH access configured.
+  * A Debian-based OS (e.g., Ubuntu).
+* Python installed on the target host (required by Ansible).
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## ⚙️ Inventory (`hosts` file)
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Update the `hosts` file with the IP address or hostname of your target machine:
 
-License
--------
+```ini
+[webservers]
+your_server_ip_or_hostname ansible_user=your_user ansible_ssh_private_key_file=~/.ssh/your_key
+```
 
-BSD
+## 🛠️ Running the Playbook
 
-Author Information
-------------------
+1. Clone the repository:
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```bash
+git clone https://github.com/emanzaki/Deploy-website-with-ansible-role.git
+cd Deploy-website-with-ansible-role
+```
+
+2. Run the Ansible playbook:
+
+```bash
+ansible-navigator run deploy.yml
+```
+
+## 📄 Role: `website`
+
+This role performs the following tasks:
+
+* Installs Apache2.
+* Starts and enables the Apache2 service.
+* Write the hostname to `/var/www/html/index.html`.
+
+## 📝 License
+
+This project is open-source and available under the [MIT License](LICENSE) (add if applicable).
+
+## 👩‍💻 Author
+
+**Eman Zaki**
+[GitHub Profile](https://github.com/emanzaki)
